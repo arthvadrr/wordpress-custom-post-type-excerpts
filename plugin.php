@@ -15,23 +15,27 @@ if (!defined('ABSPATH')) {
   exit;
 }
 
-function require_post_excerpts_page()
+function cpte_init()
 {
-  require 'admin-pages/post_excerpts.php';
-}
+  function require_post_excerpts_page()
+  {
+    require 'admin-pages/post_excerpts.php';
+  }
 
-if (is_admin()) {
-  add_action('admin_menu', 'register_admin_submenu');
-}
+  function register_admin_submenu()
+  {
+    add_submenu_page(
+      'tools.php',
+      'Set Excerpt Lengths',
+      'Set Excerpt Lengths',
+      'edit_pages',
+      'post-excerpts',
+      'require_post_excerpts_page'
+    );
+  }
 
-function register_admin_submenu()
-{
-  add_submenu_page(
-    'tools.php',
-    'Post Excerpts',
-    'Post Excerpts',
-    'edit_pages',
-    'post-excerpts',
-    'require_post_excerpts_page'
-  );
+  if (is_admin()) {
+    add_action('admin_menu', 'register_admin_submenu');
+  }
 }
+add_action('init', 'cpte_init');

@@ -1,6 +1,8 @@
 <?php
 $form_action = admin_url() . 'tools.php?page=post-excerpts';
 $post_types = get_post_types();
+$option_prefix = 'cpte_';
+
 $ignored_post_types = [
   'attachment',
   'revision',
@@ -27,13 +29,22 @@ $ignored_post_types = [
         <?php
         foreach ($post_types as $type) :
           if (!in_array($type, $ignored_post_types)) :
+            $length = 55;
+            $option_name = $option_prefix . $type;
+            $option = get_option($option_name);
+
+            if ($option) {
+              $length = $option;
+            } else {
+              add_option($option_name, $length);
+            }
         ?>
             <tr>
               <th scope="row">
                 <label for="<?php echo $type ?>"><?php echo $type ?></label>
               </th>
               <td>
-                <input type="text" required="" class="regular-text ltr" id="username_or_email_for_privacy_request" name="username_or_email_for_privacy_request">
+                <input type="text" required="" class="regular-text ltr" id="username_or_email_for_privacy_request" name="username_or_email_for_privacy_request" value="<?php echo $length; ?>">
               </td>
             </tr>
         <?php
