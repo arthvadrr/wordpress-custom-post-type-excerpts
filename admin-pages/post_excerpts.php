@@ -1,11 +1,20 @@
 <?php
 $form_action = admin_url() . 'tools.php?page=post-excerpts';
 $post_types = get_post_types();
-
-$excerpts = $wpdb->get_results(
-  "SELECT ID, post_title FROM $wpdb->posts WHERE post_status = 'publish'
-  AND post_type='post' ORDER BY comment_count DESC LIMIT 0,4"
-)
+$ignored_post_types = [
+  'attachment',
+  'revision',
+  'nav_menu_item',
+  'custom_css',
+  'customize_changeset',
+  'oembed_cache',
+  'user_request',
+  'wp_block',
+  'wp_template',
+  'wp_template_part',
+  'wp_global_styles',
+  'wp_navigation'
+]
 ?>
 
 <section class="wrap">
@@ -15,16 +24,22 @@ $excerpts = $wpdb->get_results(
     <h2>Add Data Export Request</h2>
     <table class="form-table">
       <tbody>
-        <?php foreach ($post_types as $type) : ?>
-          <tr>
-            <th scope="row">
-              <label for="<?php echo $type ?>"><?php echo $type ?></label>
-            </th>
-            <td>
-              <input type="text" required="" class="regular-text ltr" id="username_or_email_for_privacy_request" name="username_or_email_for_privacy_request">
-            </td>
-          </tr>
-        <?php endforeach ?>
+        <?php
+        foreach ($post_types as $type) :
+          if (!in_array($type, $ignored_post_types)) :
+        ?>
+            <tr>
+              <th scope="row">
+                <label for="<?php echo $type ?>"><?php echo $type ?></label>
+              </th>
+              <td>
+                <input type="text" required="" class="regular-text ltr" id="username_or_email_for_privacy_request" name="username_or_email_for_privacy_request">
+              </td>
+            </tr>
+        <?php
+          endif;
+        endforeach;
+        ?>
       </tbody>
     </table>
     <?php wp_nonce_field($form_action) ?>
