@@ -1,7 +1,7 @@
 <?php
 $form_action = admin_url() . 'tools.php?page=post-excerpts';
 $post_types = get_post_types();
-$option_prefix = 'cpte_';
+$option_prefix = 'cpte_excerpt_length__';
 
 $ignored_post_types = [
   'attachment',
