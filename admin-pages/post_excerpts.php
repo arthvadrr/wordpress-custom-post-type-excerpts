@@ -2,6 +2,8 @@
 $form_action = admin_url() . 'tools.php?page=post-excerpts';
 $post_types = get_post_types();
 $option_prefix = 'cpte_excerpt_length__';
+$success_notice_rendered = false;
+$updated_count = 0;
 
 $ignored_post_types = [
   'attachment',
@@ -18,33 +20,56 @@ $ignored_post_types = [
   'wp_navigation'
 ]
 ?>
-
 <section class="wrap">
-  <?php print_r($post_types) ?>
-  <h1>hello world</h1>
+  <p>
+  <h1>Set Excerpt Lengths</h1>
+  <h2>Set the new excerpt length for each post type.</h2>
+  </p>
   <form action="<?php echo $form_action; ?>" method="post">
-    <h2>Add Data Export Request</h2>
     <table class="form-table">
       <tbody>
         <?php
         foreach ($post_types as $type) :
+
+          if ($updated_count === 1 && !$success_notice_rendered) : ?>
+            <div id="setting-error-settings_updated" class="notice notice-success settings-error">
+              <p><strong>Settings saved.</strong></p>
+            </div>
+          <?php
+            $success_notice_rendered = true;
+          endif;
+
           if (!in_array($type, $ignored_post_types)) :
             $length = 55;
+            $length_input_name = $option_prefix . $type;
+            $updated = isset($_POST[$length_input_name]);
             $option_name = $option_prefix . $type;
             $option = get_option($option_name);
 
-            if ($option) {
-              $length = $option;
+            if ($updated) {
+              $length = $_POST[$length_input_name];
+              update_option($option_name, $length);
             } else {
-              add_option($option_name, $length);
+              if ($option) {
+                $length = $option;
+              } else {
+                add_option($option_name, $length);
+              }
             }
-        ?>
+
+            if (!$length) $length = 0;
+          ?>
             <tr>
               <th scope="row">
                 <label for="<?php echo $type ?>"><?php echo $type ?></label>
               </th>
               <td>
-                <input type="text" required="" class="regular-text ltr" id="username_or_email_for_privacy_request" name="username_or_email_for_privacy_request" value="<?php echo $length; ?>">
+                <input type="text" id="" name="<?php echo $length_input_name; ?>" value="<?php echo $length; ?>">
+                <?php if ($updated && $length !== $option) :
+                  $updated_count++;
+                ?>
+                  <strong style="color: #00a32a;" class="fade-out">Updated!</strong>
+                <?php endif; ?>
               </td>
             </tr>
         <?php
@@ -55,7 +80,10 @@ $ignored_post_types = [
     </table>
     <?php wp_nonce_field($form_action) ?>
     <p class="submit">
-      <input type="submit" name="submit" id="submit" class="button" value="Send Request">
+      <input type="submit" name="submit" id="submit" class="button" value="Save">
+      <?php if ($updated_count === 0 && isset($_POST['submit'])) : ?>
+        <span class="fade-out">(No settings were changed)</span>
+      <?php endif; ?>
     </p>
   </form>
 </section>
