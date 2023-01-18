@@ -49,7 +49,20 @@ add_action('init', 'cpte_init');
 function cpte_set_excerpt_length()
 {
   global $post;
-  return get_option('cpte_excerpt_length__' . $post->post_type);
-}
+  $option_prefix = 'cpte_excerpt_length__';
+  $option = get_option('cpte_excerpt_length__' . $post->post_type);
 
+  if (!$option) {
+    add_option($option_prefix . $post->post_type, 55);
+    $option = 55;
+  }
+
+  return $option;
+}
 add_filter('excerpt_length', 'cpte_set_excerpt_length');
+
+function cpte_deactivate()
+{
+  flush_rewrite_rules();
+}
+register_deactivation_hook(__FILE__, 'cpte_deactivate');
