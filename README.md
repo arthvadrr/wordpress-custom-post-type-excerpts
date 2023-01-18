@@ -1,5 +1,5 @@
 # wordpress-custom-post-type-excerpts
-Allows setting custom excerpt lengths for all post types in the WordPress admin.
+Allows setting custom excerpt lengths for all post types from the WordPress admin.
 
 ## How to use
 1. Clone this repository or download a release.
