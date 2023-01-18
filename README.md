@@ -2,12 +2,12 @@
 Allows setting custom excerpt lengths for all post types in the WordPress admin.
 
 ## How to use
-1. Clone this repository or download a release
-1. Zip the project directory ("wordpress-custom-post-type-excerpts") and install from the admin plugins page
-1. Alternatively, upload the directory to  "YOUR_SITE_NAME/app/public/wp-content/plugins"
-1. All excerpt lengths are set to 55 by default (same as WordPress core's default)
-1. A new page is added to the admin menu under "Tools" titled "Set Post Excerpts"
-1. Change the desired excerpt length and select "Save"
+1. Clone this repository or download a release.
+1. Zip the project directory ("wordpress-custom-post-type-excerpts") and install from the admin plugins page.
+1. Alternatively, upload the directory to  "YOUR_SITE_NAME/app/public/wp-content/plugins".
+1. All excerpt lengths are set to 55 by default (same as WordPress core's default).
+1. A new page is added to the admin menu under "Tools" titled "Set Post Excerpts".
+1. Change the desired excerpt length and select "Save".
 
 ## Version
 
