@@ -45,3 +45,11 @@ function cpte_init()
   }
 }
 add_action('init', 'cpte_init');
+
+function cpte_set_excerpt_length()
+{
+  global $post;
+  return get_option('cpte_excerpt_length__' . $post->post_type);
+}
+
+add_filter('excerpt_length', 'cpte_set_excerpt_length');
